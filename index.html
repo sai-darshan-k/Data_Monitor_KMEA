@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Karnataka Marriage Incentive Scheme – Live Monitor</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#080c14;--surf:#0e1520;--border:#1a2840;
+  --a1:#f97316;--a2:#22d3ee;--a3:#a78bfa;--a4:#34d399;--a5:#fb7185;--a6:#fbbf24;
+  --text:#e2e8f0;--muted:#4e6080;
+  --font:'Syne',sans-serif;--mono:'DM Mono',monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden}
+body::before{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background:
+    radial-gradient(ellipse 70% 45% at 5% 15%,rgba(249,115,22,.07) 0%,transparent 65%),
+    radial-gradient(ellipse 55% 35% at 95% 85%,rgba(34,211,238,.05) 0%,transparent 65%),
+    radial-gradient(ellipse 40% 30% at 55% 50%,rgba(167,139,250,.04) 0%,transparent 70%);
+}
+
+/* HEADER */
+header{
+  position:sticky;top:0;z-index:100;
+  background:rgba(8,12,20,.93);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border);
+  padding:12px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;
+}
+.logo{display:flex;align-items:center;gap:12px}
+.logo-icon{
+  width:38px;height:38px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,var(--a1),#c2410c);
+  display:grid;place-items:center;font-size:18px;
+}
+.logo-text h1{font-size:.95rem;font-weight:800;letter-spacing:.02em}
+.logo-text p{font-size:.64rem;color:var(--muted);font-family:var(--mono)}
+.hdr-right{display:flex;align-items:center;gap:14px}
+.live-badge{
+  display:flex;align-items:center;gap:6px;
+  background:rgba(52,211,153,.07);border:1px solid rgba(52,211,153,.2);
+  border-radius:20px;padding:4px 12px;font-size:.68rem;color:var(--a4);font-family:var(--mono);
+}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--a4);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
+.timer{font-size:.64rem;color:var(--muted);font-family:var(--mono)}
+.refresh-btn{
+  background:none;border:1px solid var(--border);color:var(--text);
+  border-radius:8px;padding:5px 14px;font-family:var(--font);font-size:.72rem;cursor:pointer;transition:all .2s;
+}
+.refresh-btn:hover{border-color:var(--a2);color:var(--a2)}
+
+/* MAIN */
+main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28px;display:flex;flex-direction:column;gap:16px}
+
+/* STATUS */
+.status-bar{
+  display:flex;align-items:center;gap:10px;flex-wrap:wrap;
+  font-size:.7rem;font-family:var(--mono);color:var(--muted);
+  padding:7px 16px;background:var(--surf);border-radius:8px;border:1px solid var(--border);
+}
+.s-ok{color:var(--a4)}.s-err{color:var(--a5)}.s-load{color:var(--a2)}
+
+/* KPI */
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px}
+.kpi{
+  background:var(--surf);border:1px solid var(--border);border-radius:14px;
+  padding:15px 17px;position:relative;overflow:hidden;
+  transition:border-color .2s,transform .2s;cursor:default;
+}
+.kpi:hover{border-color:var(--kc,var(--a1));transform:translateY(-2px)}
+.kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--a1));border-radius:14px 14px 0 0}
+.kpi-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
+.kpi-val{font-size:1.85rem;font-weight:800;color:var(--kc,var(--a1));line-height:1}
+.kpi-sub{font-size:.62rem;color:var(--muted);margin-top:4px;font-family:var(--mono)}
+.kpi-ico{position:absolute;top:13px;right:13px;font-size:1.35rem;opacity:.14}
+
+/* CARDS */
+.card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:18px;overflow:hidden}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
+.card-badge{font-size:.58rem;font-family:var(--mono);background:rgba(249,115,22,.08);color:var(--a1);border:1px solid rgba(249,115,22,.18);border-radius:20px;padding:2px 9px}
+
+/* GRID */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+@media(max-width:1000px){.g2,.g3,.g21{grid-template-columns:1fr}}
+
+/* TIMELINE */
+.tl-wrap{display:flex;align-items:flex-end;gap:3px;height:96px;padding-top:6px}
+.tl-col{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0}
+.tl-bar{
+  width:100%;border-radius:3px 3px 0 0;min-height:3px;
+  background:linear-gradient(0deg,var(--a1),var(--a2));
+  position:relative;cursor:pointer;transition:opacity .2s;
+}
+.tl-bar:hover{opacity:.7}
+.tl-bar:hover::after{
+  content:attr(data-tip);position:absolute;bottom:calc(100%+5px);left:50%;transform:translateX(-50%);
+  background:#1e2d45;color:var(--text);font-size:.58rem;padding:3px 7px;border-radius:5px;
+  white-space:nowrap;font-family:var(--mono);pointer-events:none;z-index:20;
+}
+.tl-lbl{font-size:.48rem;color:var(--muted);margin-top:3px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;text-align:center}
+
+/* DONUT */
+.donut-wrap{display:flex;align-items:center;gap:18px}
+.donut-svg{flex-shrink:0}
+.donut-legend{display:flex;flex-direction:column;gap:8px;flex:1}
+.dl-row{display:flex;align-items:center;gap:8px;font-size:.72rem}
+.dl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.dl-name{flex:1}
+.dl-val{font-family:var(--mono);font-weight:700}
+.dl-pct{font-size:.6rem;color:var(--muted);font-family:var(--mono)}
+
+/* HORIZ BARS */
+.horiz-list{display:flex;flex-direction:column;gap:11px}
+.horiz-top{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
+.horiz-name{font-size:.73rem;flex:1}
+.horiz-count{font-family:var(--mono);font-size:.72rem;font-weight:700}
+.horiz-bar-bg{height:7px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden}
+.horiz-bar-fill{height:100%;border-radius:4px;transition:width .9s ease}
+
+/* SURVEYOR */
+.sv-row{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid rgba(26,40,64,.4)}
+.sv-rank{font-size:.58rem;font-family:var(--mono);color:var(--muted);width:18px;text-align:center;flex-shrink:0}
+.sv-name{font-size:.72rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sv-bar-wrap{width:90px;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;flex-shrink:0}
+.sv-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--a3),var(--a2));transition:width .9s ease}
+.sv-count{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--a2);min-width:26px;text-align:right;flex-shrink:0}
+
+/* HEATMAP */
+.heatmap{display:flex;flex-wrap:wrap;gap:8px}
+.hm-chip{border-radius:9px;padding:8px 13px;cursor:default;display:flex;flex-direction:column;gap:3px;transition:transform .15s;border:1px solid transparent}
+.hm-chip:hover{transform:scale(1.06)}
+.hm-name{font-size:.67rem;font-weight:700}
+.hm-val{font-size:.6rem;font-family:var(--mono)}
+
+/* PROGRESS TABLE */
+.filter-row{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.filter-row select{
+  background:#09111e;border:1px solid var(--border);color:var(--text);
+  border-radius:7px;padding:5px 10px;font-family:var(--mono);font-size:.67rem;outline:none;cursor:pointer;
+}
+.filter-row select:focus{border-color:var(--a2)}
+.tbl-scroll{overflow-x:auto;max-height:380px;overflow-y:auto}
+.tbl-scroll::-webkit-scrollbar{width:4px;height:4px}
+.tbl-scroll::-webkit-scrollbar-track{background:transparent}
+.tbl-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.ptbl{width:100%;border-collapse:collapse;font-size:.71rem}
+.ptbl th{
+  text-align:left;font-size:.58rem;color:var(--muted);text-transform:uppercase;
+  letter-spacing:.07em;padding:6px 8px;border-bottom:1px solid var(--border);
+  position:sticky;top:0;background:var(--surf);z-index:1;
+}
+.ptbl td{padding:6px 8px;border-bottom:1px solid rgba(26,40,64,.4)}
+.ptbl tr:hover td{background:rgba(255,255,255,.015)}
+.pbar-w{display:flex;align-items:center;gap:7px}
+.pbar{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
+.pbar-f{height:100%;border-radius:3px;transition:width .9s ease}
+.pct-lbl{font-size:.6rem;font-family:var(--mono);min-width:30px;text-align:right}
+.tier-b{font-size:.57rem;padding:1px 6px;border-radius:4px;font-family:var(--mono)}
+.t-H{background:rgba(249,115,22,.12);color:var(--a1)}
+.t-M{background:rgba(167,139,250,.12);color:var(--a3)}
+.t-L{background:rgba(100,116,139,.12);color:var(--muted)}
+
+.empty{text-align:center;padding:30px;color:var(--muted);font-size:.73rem}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🪷</div>
+    <div class="logo-text">
+      <h1>Karnataka Marriage Incentive Scheme – Data Collection Monitor</h1>
+      <p>SC/ST Welfare Department · Live Google Sheets Feed · Auto-refreshes every 60s</p>
+    </div>
+  </div>
+  <div class="hdr-right">
+    <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+    <div class="timer" id="nextRefresh">Next refresh in 60s</div>
+    <button class="refresh-btn" onclick="loadAll()">⟳ Refresh Now</button>
+  </div>
+</header>
+
+<main>
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span>●</span>
+    <span id="statusText" class="s-load">Connecting to Google Sheets…</span>
+    <span style="margin-left:auto" id="lastUpdated"></span>
+  </div>
+
+  <!-- KPI Strip -->
+  <div class="kpi-row">
+    <div class="kpi" style="--kc:var(--a1)">
+      <div class="kpi-ico">📋</div>
+      <div class="kpi-lbl">Total Responses</div>
+      <div class="kpi-val" id="kTotal">—</div>
+      <div class="kpi-sub">all districts · all schemes</div>
+    </div>
+    <div class="kpi" style="--kc:var(--a4)">
+      <div class="kpi-ico">📅</div>
+      <div class="kpi-lbl">Today's Submissions</div>
+      <div class="kpi-val" id="kToday">—</div>
+      <div class="kpi-sub">surveys filed today</div>
+    </div>
+    <div class="kpi" style="--kc:var(--a2)">
+      <div class="kpi-ico">📍</div>
+      <div class="kpi-lbl">Districts Active</div>
+      <div class="kpi-val" id="kDist">—</div>
+      <div class="kpi-sub">of 31 Karnataka districts</div>
+    </div>
+    <div class="kpi" style="--kc:var(--a3)">
+      <div class="kpi-ico">🗺️</div>
+      <div class="kpi-lbl">Taluks Covered</div>
+      <div class="kpi-val" id="kTaluks">—</div>
+      <div class="kpi-sub">unique taluks surveyed</div>
+    </div>
+    <div class="kpi" style="--kc:var(--a6)">
+      <div class="kpi-ico">🕵️</div>
+      <div class="kpi-lbl">Active Surveyors</div>
+      <div class="kpi-val" id="kSurveyors">—</div>
+      <div class="kpi-sub">field staff submitting</div>
+    </div>
+    <div class="kpi" style="--kc:var(--a5)">
+      <div class="kpi-ico">📊</div>
+      <div class="kpi-lbl">Overall Progress</div>
+      <div class="kpi-val" id="kProgress">—</div>
+      <div class="kpi-sub">collected vs targets</div>
+    </div>
+  </div>
+
+  <!-- Timeline + Donut -->
+  <div class="g21">
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Daily Submission Timeline</div>
+        <div class="card-badge" id="tlBadge">30 days</div>
+      </div>
+      <div class="tl-wrap" id="timelineChart"><div class="empty">Loading…</div></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Scheme Distribution</div>
+        <div class="card-badge" id="schemeBadge">5 schemes</div>
+      </div>
+      <div class="donut-wrap" id="schemeDonut"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- Horiz scheme bars + Surveyor leaderboard -->
+  <div class="g2">
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Responses by Scheme Type</div>
+        <div class="card-badge" id="horizBadge">All Schemes</div>
+      </div>
+      <div class="horiz-list" id="horizBars"><div class="empty">Loading…</div></div>
+    </div>
+    <div class="card">
+      <div class="card-hdr">
+        <div class="card-title">Surveyor Leaderboard</div>
+        <div class="card-badge" id="svBadge">By submissions</div>
+      </div>
+      <div id="surveyorList"><div class="empty">Loading…</div></div>
+    </div>
+  </div>
+
+  <!-- District Heatmap -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">District Response Heatmap</div>
+      <div class="card-badge" id="hmBadge">Response density</div>
+    </div>
+    <div class="heatmap" id="districtHeatmap"><div class="empty">Loading…</div></div>
+  </div>
+
+  <!-- Progress Table -->
+  <div class="card">
+    <div class="card-hdr">
+      <div class="card-title">District · Taluk · Target vs Collected Progress</div>
+      <div class="card-badge" id="progBadge">All</div>
+    </div>
+    <div class="filter-row">
+      <select id="fDistrict" onchange="filterProgress()"><option value="">All Districts</option></select>
+      <select id="fScheme" onchange="filterProgress()">
+        <option value="">All Schemes</option>
+        <option>Inter-Caste</option><option>Inter Sub-Caste</option>
+        <option>Simple/Mass</option><option>Devadasi</option><option>Widow Remarriage</option>
+      </select>
+      <select id="fTier" onchange="filterProgress()">
+        <option value="">All Tiers</option><option>High</option><option>Medium</option><option>Low</option>
+      </select>
+      <select id="fStatus" onchange="filterProgress()">
+        <option value="">All Progress</option>
+        <option value="hi">≥ 80% done</option>
+        <option value="mid">20–79%</option>
+        <option value="lo">Below 20%</option>
+      </select>
+    </div>
+    <div class="tbl-scroll">
+      <table class="ptbl">
+        <thead>
+          <tr>
+            <th>District</th><th>Taluk</th><th>Scheme</th><th>Tier</th>
+            <th>Target</th><th>Collected</th><th>Remaining</th><th style="min-width:140px">Progress</th>
+          </tr>
+        </thead>
+        <tbody id="progBody"><tr><td colspan="8" class="empty">Loading…</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+// ── Hardcoded Apps Script URL ──────────────────────────────────
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbw0nc93s8UgANeMTPdL8wBGyxqCM-cI1ehyQHMf272DVADvxntfz6C0toHvJBNL72NE/exec';
+
+const SC = {
+  'Inter-Caste':     '#f97316',
+  'Inter Sub-Caste': '#a78bfa',
+  'Simple/Mass':     '#22d3ee',
+  'Devadasi':        '#fb7185',
+  'Widow Remarriage':'#34d399',
+  'Other':           '#4e6080'
+};
+
+let progressData = [];
+let timerSec = 60, timerInterval;
+
+// ── Init ───────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => { loadAll(); startTimer(); });
+
+function startTimer() {
+  clearInterval(timerInterval); timerSec = 60;
+  timerInterval = setInterval(() => {
+    timerSec--;
+    document.getElementById('nextRefresh').textContent = `Next refresh in ${timerSec}s`;
+    if (timerSec <= 0) { loadAll(); timerSec = 60; }
+  }, 1000);
+}
+
+function setStatus(msg, cls='s-load') {
+  const el = document.getElementById('statusText');
+  el.className = cls; el.textContent = msg;
+}
+
+// ── Fetch ──────────────────────────────────────────────────────
+async function gasGet(action) {
+  const res  = await fetch(`${GAS_URL}?action=${action}`);
+  const json = await res.json();
+  if (json.status !== 'ok') throw new Error(json.message || 'API error');
+  return json.data;
+}
+
+async function loadAll() {
+  setStatus('Fetching live data from Google Sheets…', 's-load');
+  startTimer();
+  try {
+    const [summary, progress, surveyors, timeline] = await Promise.all([
+      gasGet('summary'), gasGet('progress'), gasGet('surveyor'), gasGet('timeline')
+    ]);
+    progressData = progress;
+    renderKPIs(summary, progress, surveyors);
+    renderTimeline(timeline);
+    renderSchemeDonut(summary.scheme_breakdown || {});
+    renderHorizBars(summary.scheme_breakdown || {});
+    renderSurveyors(surveyors);
+    renderHeatmap(summary.district_breakdown || {});
+    renderProgress(progress);
+    populateDistrictFilter(summary.district_breakdown || {});
+    document.getElementById('lastUpdated').textContent =
+      `Last updated: ${new Date().toLocaleTimeString()}`;
+    setStatus(`Connected · ${summary.total_responses} total responses · ${Object.keys(summary.district_breakdown||{}).length} districts active`, 's-ok');
+  } catch(e) {
+    setStatus(`Connection error: ${e.message}`, 's-err');
+  }
+}
+
+// ── KPIs ───────────────────────────────────────────────────────
+function renderKPIs(s, progress, surveyors) {
+  document.getElementById('kTotal').textContent    = (s.total_responses||0).toLocaleString();
+  document.getElementById('kToday').textContent    = (s.today_responses||0).toLocaleString();
+  document.getElementById('kDist').textContent     = Object.keys(s.district_breakdown||{}).length;
+  document.getElementById('kTaluks').textContent   = new Set(progress.map(r=>r.taluk)).size;
+  document.getElementById('kSurveyors').textContent= Object.keys(surveyors||{}).length;
+  const tot  = progress.reduce((a,r)=>a+r.target,0);
+  const done = progress.reduce((a,r)=>a+r.completed,0);
+  document.getElementById('kProgress').textContent = tot>0 ? Math.round((done/tot)*100)+'%' : '—';
+}
+
+// ── Timeline ───────────────────────────────────────────────────
+function renderTimeline(data) {
+  const el = document.getElementById('timelineChart');
+  if (!data||!data.length) { el.innerHTML='<div class="empty">No timeline data yet</div>'; return; }
+  const last = data.slice(-40);
+  const max  = Math.max(...last.map(d=>d.count), 1);
+  document.getElementById('tlBadge').textContent = `${last.length} days`;
+  el.innerHTML = last.map(d => {
+    const h = Math.max(4, Math.round((d.count/max)*88));
+    return `<div class="tl-col">
+      <div class="tl-bar" style="height:${h}px" data-tip="${d.date}: ${d.count}"></div>
+      <div class="tl-lbl">${d.date.slice(5)}</div>
+    </div>`;
+  }).join('');
+}
+
+// ── Scheme Donut ───────────────────────────────────────────────
+function renderSchemeDonut(data) {
+  const el = document.getElementById('schemeDonut');
+  const entries = Object.entries(data).sort((a,b)=>b[1]-a[1]);
+  if (!entries.length) { el.innerHTML='<div class="empty">No scheme data yet</div>'; return; }
+  const total = entries.reduce((s,[,v])=>s+v,0)||1;
+  document.getElementById('schemeBadge').textContent = `${entries.length} schemes · ${total} total`;
+
+  const R=54,r=34,cx=70,cy=70;
+  let startAngle=-Math.PI/2, paths='';
+  entries.forEach(([name,cnt])=>{
+    const angle=(cnt/total)*2*Math.PI;
+    const x1=cx+R*Math.cos(startAngle),y1=cy+R*Math.sin(startAngle);
+    const x2=cx+R*Math.cos(startAngle+angle),y2=cy+R*Math.sin(startAngle+angle);
+    const xi1=cx+r*Math.cos(startAngle+angle),yi1=cy+r*Math.sin(startAngle+angle);
+    const xi2=cx+r*Math.cos(startAngle),yi2=cy+r*Math.sin(startAngle);
+    const lg=angle>Math.PI?1:0;
+    const col=SC[name]||'#4e6080';
+    paths+=`<path d="M${x1},${y1} A${R},${R} 0 ${lg},1 ${x2},${y2} L${xi1},${yi1} A${r},${r} 0 ${lg},0 ${xi2},${yi2} Z" fill="${col}" opacity=".88"><title>${name}: ${cnt}</title></path>`;
+    startAngle+=angle;
+  });
+
+  const svg=`<svg class="donut-svg" width="140" height="140" viewBox="0 0 140 140">
+    ${paths}
+    <text x="70" y="66" text-anchor="middle" font-family="Syne,sans-serif" font-size="18" font-weight="800" fill="#e2e8f0">${total}</text>
+    <text x="70" y="80" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#4e6080">TOTAL</text>
+  </svg>`;
+
+  const legend=`<div class="donut-legend">${entries.map(([name,cnt])=>{
+    const col=SC[name]||'#4e6080';
+    return `<div class="dl-row">
+      <div class="dl-dot" style="background:${col}"></div>
+      <div class="dl-name">${name}</div>
+      <div class="dl-val" style="color:${col}">${cnt}</div>
+      <div class="dl-pct">${Math.round((cnt/total)*100)}%</div>
+    </div>`;
+  }).join('')}</div>`;
+
+  el.innerHTML = svg+legend;
+}
+
+// ── Horizontal bars ────────────────────────────────────────────
+function renderHorizBars(data) {
+  const el = document.getElementById('horizBars');
+  const entries = Object.entries(data).sort((a,b)=>b[1]-a[1]);
+  if (!entries.length) { el.innerHTML='<div class="empty">No data yet</div>'; return; }
+  const max=entries[0][1]||1;
+  document.getElementById('horizBadge').textContent=`${entries.length} scheme types`;
+  el.innerHTML=entries.map(([name,cnt])=>{
+    const col=SC[name]||'#4e6080';
+    return `<div>
+      <div class="horiz-top">
+        <div class="horiz-name" style="color:${col}">${name}</div>
+        <div class="horiz-count" style="color:${col}">${cnt}</div>
+      </div>
+      <div class="horiz-bar-bg"><div class="horiz-bar-fill" style="width:${Math.round((cnt/max)*100)}%;background:${col}"></div></div>
+    </div>`;
+  }).join('');
+}
+
+// ── Surveyors ──────────────────────────────────────────────────
+function renderSurveyors(data) {
+  const el=document.getElementById('surveyorList');
+  const entries=Object.entries(data).sort((a,b)=>b[1].count-a[1].count).slice(0,18);
+  if (!entries.length) { el.innerHTML='<div class="empty">No surveyor data yet</div>'; return; }
+  const max=entries[0][1].count||1;
+  document.getElementById('svBadge').textContent=`${Object.keys(data).length} surveyors`;
+  el.innerHTML=entries.map(([name,info],i)=>`
+    <div class="sv-row">
+      <div class="sv-rank">#${i+1}</div>
+      <div class="sv-name" title="${name}">${name}</div>
+      <div class="sv-bar-wrap"><div class="sv-bar" style="width:${Math.round((info.count/max)*100)}%"></div></div>
+      <div class="sv-count">${info.count}</div>
+    </div>`).join('');
+}
+
+// ── Heatmap ────────────────────────────────────────────────────
+function renderHeatmap(data) {
+  const el=document.getElementById('districtHeatmap');
+  const entries=Object.entries(data).sort((a,b)=>b[1]-a[1]);
+  const max=entries[0]?.[1]||1;
+  const total=entries.reduce((s,[,v])=>s+v,0)||1;
+  if (!entries.length) { el.innerHTML='<div class="empty">No district data yet</div>'; return; }
+  document.getElementById('hmBadge').textContent=`${entries.length} districts`;
+  el.innerHTML=entries.map(([d,c])=>{
+    const inten=c/max;
+    const textCol=inten>.5?'#f97316':inten>.25?'#fbbf24':'#94a3b8';
+    return `<div class="hm-chip" title="${d}: ${c} responses (${Math.round((c/total)*100)}%)"
+      style="background:rgba(249,115,22,${0.07+inten*.5});border-color:rgba(249,115,22,${0.14+inten*.48})">
+      <div class="hm-name" style="color:${textCol}">${d}</div>
+      <div class="hm-val" style="color:${textCol}">${c}<span style="font-size:.52rem;opacity:.7"> resp</span></div>
+    </div>`;
+  }).join('');
+}
+
+// ── Progress Table ─────────────────────────────────────────────
+function renderProgress(data) { progressData=data; filterProgress(); }
+
+function filterProgress() {
+  const df=document.getElementById('fDistrict').value;
+  const sf=document.getElementById('fScheme').value;
+  const tf=document.getElementById('fTier').value;
+  const stf=document.getElementById('fStatus').value;
+
+  let rows=progressData.filter(r=>{
+    if(df&&r.district!==df)return false;
+    if(sf&&r.scheme!==sf)return false;
+    if(tf&&r.tier!==tf)return false;
+    if(stf==='hi'&&r.pct_done<80)return false;
+    if(stf==='mid'&&(r.pct_done<20||r.pct_done>=80))return false;
+    if(stf==='lo'&&r.pct_done>=20)return false;
+    return true;
+  });
+
+  document.getElementById('progBadge').textContent=`${rows.length} rows`;
+  const tbody=document.getElementById('progBody');
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="8" class="empty">No matching records</td></tr>';return;}
+
+  tbody.innerHTML=rows.map(r=>{
+    const col=r.pct_done>=80?'var(--a4)':r.pct_done>=40?'var(--a1)':'var(--a5)';
+    const sc=SC[r.scheme]||'#aaa';
+    return `<tr>
+      <td>${r.district}</td>
+      <td>${r.taluk}</td>
+      <td><span style="color:${sc}">${r.scheme}</span></td>
+      <td><span class="tier-b t-${r.tier[0]}">${r.tier}</span></td>
+      <td style="font-family:var(--mono)">${r.target}</td>
+      <td style="font-family:var(--mono);font-weight:700;color:${col}">${r.completed}</td>
+      <td style="font-family:var(--mono);color:var(--muted)">${r.remaining}</td>
+      <td><div class="pbar-w">
+        <div class="pbar"><div class="pbar-f" style="width:${r.pct_done}%;background:${col}"></div></div>
+        <div class="pct-lbl" style="color:${col}">${r.pct_done}%</div>
+      </div></td>
+    </tr>`;
+  }).join('');
+}
+
+function populateDistrictFilter(districtMap) {
+  const sel=document.getElementById('fDistrict');
+  const existing=new Set([...sel.options].map(o=>o.value));
+  Object.keys(districtMap).sort().forEach(d=>{
+    if(!existing.has(d)){const o=document.createElement('option');o.value=o.textContent=d;sel.appendChild(o);}
+  });
+}
+</script>
+</body>
+</html>
