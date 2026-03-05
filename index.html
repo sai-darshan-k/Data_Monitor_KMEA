@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Karnataka Marriage Incentive Scheme – Live Monitor</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <style>
@@ -22,8 +22,6 @@ body::before{
     radial-gradient(ellipse 55% 35% at 95% 85%,rgba(34,211,238,.05) 0%,transparent 65%),
     radial-gradient(ellipse 40% 30% at 55% 50%,rgba(167,139,250,.04) 0%,transparent 70%);
 }
-
-/* HEADER */
 header{
   position:sticky;top:0;z-index:100;
   background:rgba(8,12,20,.93);backdrop-filter:blur(14px);
@@ -34,7 +32,7 @@ header{
 .logo-icon{
   width:38px;height:38px;border-radius:10px;flex-shrink:0;
   background:linear-gradient(135deg,var(--a1),#c2410c);
-  display:grid;place-items:center;font-size:18px;
+  display:grid;place-items:center;
 }
 .logo-text h1{font-size:.95rem;font-weight:800;letter-spacing:.02em}
 .logo-text p{font-size:.64rem;color:var(--muted);font-family:var(--mono)}
@@ -48,24 +46,21 @@ header{
 @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.3;transform:scale(.6)}}
 .timer{font-size:.64rem;color:var(--muted);font-family:var(--mono)}
 .refresh-btn{
+  display:flex;align-items:center;gap:6px;
   background:none;border:1px solid var(--border);color:var(--text);
   border-radius:8px;padding:5px 14px;font-family:var(--font);font-size:.72rem;cursor:pointer;transition:all .2s;
 }
 .refresh-btn:hover{border-color:var(--a2);color:var(--a2)}
-
-/* MAIN */
+.refresh-btn svg{width:13px;height:13px;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28px;display:flex;flex-direction:column;gap:16px}
-
-/* STATUS */
 .status-bar{
   display:flex;align-items:center;gap:10px;flex-wrap:wrap;
   font-size:.7rem;font-family:var(--mono);color:var(--muted);
   padding:7px 16px;background:var(--surf);border-radius:8px;border:1px solid var(--border);
 }
 .s-ok{color:var(--a4)}.s-err{color:var(--a5)}.s-load{color:var(--a2)}
-
 /* KPI */
-.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(155px,1fr));gap:12px}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}
 .kpi{
   background:var(--surf);border:1px solid var(--border);border-radius:14px;
   padding:15px 17px;position:relative;overflow:hidden;
@@ -73,166 +68,163 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
 }
 .kpi:hover{border-color:var(--kc,var(--a1));transform:translateY(-2px)}
 .kpi::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--kc,var(--a1));border-radius:14px 14px 0 0}
-.kpi-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px}
+.kpi-lbl{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:7px;padding-right:30px}
 .kpi-val{font-size:1.85rem;font-weight:800;color:var(--kc,var(--a1));line-height:1}
+.kpi-val.small{font-size:1.3rem}
 .kpi-sub{font-size:.62rem;color:var(--muted);margin-top:4px;font-family:var(--mono)}
-.kpi-ico{position:absolute;top:13px;right:13px;font-size:1.35rem;opacity:.14}
-
-/* CARDS */
+.kpi-ico{position:absolute;top:13px;right:13px;width:22px;height:22px;opacity:.18}
+.kpi-ico svg{width:22px;height:22px;fill:none;stroke:var(--kc,var(--a1));stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+/* GRID */
+.g21{display:grid;grid-template-columns:2fr 1fr;gap:16px}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media(max-width:900px){.g21,.g2{grid-template-columns:1fr}}
 .card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:18px;overflow:hidden}
-.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px}
 .card-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
 .card-badge{font-size:.58rem;font-family:var(--mono);background:rgba(249,115,22,.08);color:var(--a1);border:1px solid rgba(249,115,22,.18);border-radius:20px;padding:2px 9px}
-
-/* GRID */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
-.g21{display:grid;grid-template-columns:2fr 1fr;gap:16px}
-@media(max-width:1000px){.g2,.g3,.g21{grid-template-columns:1fr}}
-
+.empty{text-align:center;padding:30px;color:var(--muted);font-size:.73rem}
 /* TIMELINE */
-.tl-wrap{display:flex;align-items:flex-end;gap:3px;height:96px;padding-top:6px}
-.tl-col{display:flex;flex-direction:column;align-items:center;flex:1;min-width:0}
-.tl-bar{
-  width:100%;border-radius:3px 3px 0 0;min-height:3px;
-  background:linear-gradient(0deg,var(--a1),var(--a2));
-  position:relative;cursor:pointer;transition:opacity .2s;
-}
+.tl-wrap{display:flex;align-items:flex-end;gap:3px;height:96px;overflow-x:auto;padding-bottom:2px}
+.tl-col{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;width:22px;cursor:default;position:relative}
+.tl-bar{width:14px;border-radius:3px 3px 0 0;background:linear-gradient(180deg,var(--a1),#7c2d12);transition:opacity .15s}
 .tl-bar:hover{opacity:.7}
-.tl-bar:hover::after{
-  content:attr(data-tip);position:absolute;bottom:calc(100%+5px);left:50%;transform:translateX(-50%);
-  background:#1e2d45;color:var(--text);font-size:.58rem;padding:3px 7px;border-radius:5px;
-  white-space:nowrap;font-family:var(--mono);pointer-events:none;z-index:20;
-}
 .tl-lbl{font-size:.48rem;color:var(--muted);margin-top:3px;font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;text-align:center}
-
 /* DONUT */
-.donut-wrap{display:flex;align-items:center;gap:18px}
-.donut-svg{flex-shrink:0}
-.donut-legend{display:flex;flex-direction:column;gap:8px;flex:1}
-.dl-row{display:flex;align-items:center;gap:8px;font-size:.72rem}
-.dl-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.dl-name{flex:1}
-.dl-val{font-family:var(--mono);font-weight:700}
+.donut-wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.donut-legend{display:flex;flex-direction:column;gap:7px;flex:1;min-width:120px}
+.dl-row{display:flex;align-items:center;gap:7px}
+.dl-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.dl-name{font-size:.67rem;flex:1}
+.dl-val{font-size:.72rem;font-weight:700;font-family:var(--mono)}
 .dl-pct{font-size:.6rem;color:var(--muted);font-family:var(--mono)}
-
-/* HORIZ BARS */
-.horiz-list{display:flex;flex-direction:column;gap:11px}
-.horiz-top{display:flex;align-items:baseline;gap:8px;margin-bottom:4px}
-.horiz-name{font-size:.73rem;flex:1}
-.horiz-count{font-family:var(--mono);font-size:.72rem;font-weight:700}
+/* HORIZ */
+.horiz-list{display:flex;flex-direction:column;gap:12px}
+.horiz-top{display:flex;justify-content:space-between;margin-bottom:4px}
+.horiz-name{font-size:.7rem;font-weight:600}
+.horiz-count{font-size:.7rem;font-weight:700;font-family:var(--mono)}
 .horiz-bar-bg{height:7px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden}
-.horiz-bar-fill{height:100%;border-radius:4px;transition:width .9s ease}
-
+.horiz-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
 /* SURVEYOR */
-.sv-row{display:flex;align-items:center;gap:10px;padding:5px 0;border-bottom:1px solid rgba(26,40,64,.4)}
+.sv-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)}
 .sv-rank{font-size:.58rem;font-family:var(--mono);color:var(--muted);width:18px;text-align:center;flex-shrink:0}
 .sv-name{font-size:.72rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sv-bar-wrap{width:90px;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;flex-shrink:0}
-.sv-bar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--a3),var(--a2));transition:width .9s ease}
+.sv-bar{height:100%;background:linear-gradient(90deg,var(--a2),var(--a3));border-radius:3px;transition:width .6s ease}
 .sv-count{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--a2);min-width:26px;text-align:right;flex-shrink:0}
-
 /* HEATMAP */
 .heatmap{display:flex;flex-wrap:wrap;gap:8px}
 .hm-chip{border-radius:9px;padding:8px 13px;cursor:default;display:flex;flex-direction:column;gap:3px;transition:transform .15s;border:1px solid transparent}
 .hm-chip:hover{transform:scale(1.06)}
-.hm-name{font-size:.67rem;font-weight:700}
-.hm-val{font-size:.6rem;font-family:var(--mono)}
-
-/* PROGRESS TABLE */
-.filter-row{display:flex;gap:8px;margin-bottom:11px;flex-wrap:wrap}
+.hm-name{font-size:.67rem;font-weight:600}
+.hm-val{font-size:.78rem;font-weight:700;font-family:var(--mono)}
+/* FILTER */
+.filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
 .filter-row select{
   background:#09111e;border:1px solid var(--border);color:var(--text);
-  border-radius:7px;padding:5px 10px;font-family:var(--mono);font-size:.67rem;outline:none;cursor:pointer;
+  border-radius:7px;padding:5px 10px;font-family:var(--mono);font-size:.65rem;cursor:pointer;
 }
-.filter-row select:focus{border-color:var(--a2)}
-.tbl-scroll{overflow-x:auto;max-height:380px;overflow-y:auto}
-.tbl-scroll::-webkit-scrollbar{width:4px;height:4px}
-.tbl-scroll::-webkit-scrollbar-track{background:transparent}
-.tbl-scroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
-.ptbl{width:100%;border-collapse:collapse;font-size:.71rem}
-.ptbl th{
-  text-align:left;font-size:.58rem;color:var(--muted);text-transform:uppercase;
-  letter-spacing:.07em;padding:6px 8px;border-bottom:1px solid var(--border);
-  position:sticky;top:0;background:var(--surf);z-index:1;
-}
-.ptbl td{padding:6px 8px;border-bottom:1px solid rgba(26,40,64,.4)}
-.ptbl tr:hover td{background:rgba(255,255,255,.015)}
-.pbar-w{display:flex;align-items:center;gap:7px}
-.pbar{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden}
-.pbar-f{height:100%;border-radius:3px;transition:width .9s ease}
-.pct-lbl{font-size:.6rem;font-family:var(--mono);min-width:30px;text-align:right}
-.tier-b{font-size:.57rem;padding:1px 6px;border-radius:4px;font-family:var(--mono)}
+.filter-row select:focus{border-color:var(--a2);outline:none}
+/* TABLE */
+.tbl-scroll{overflow-x:auto;max-height:400px;overflow-y:auto}
+.ptbl{width:100%;border-collapse:collapse;font-size:.68rem}
+.ptbl thead{position:sticky;top:0;z-index:5;background:var(--surf)}
+.ptbl th{padding:8px 10px;text-align:left;font-size:.58rem;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);letter-spacing:.07em;white-space:nowrap}
+.ptbl td{padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.03);white-space:nowrap;vertical-align:middle}
+.ptbl tr:hover td{background:rgba(255,255,255,.025)}
+.tier-b{font-size:.55rem;font-family:var(--mono);border-radius:4px;padding:2px 6px;font-weight:700}
 .t-H{background:rgba(249,115,22,.12);color:var(--a1)}
 .t-M{background:rgba(167,139,250,.12);color:var(--a3)}
 .t-L{background:rgba(100,116,139,.12);color:var(--muted)}
-
-.empty{text-align:center;padding:30px;color:var(--muted);font-size:.73rem}
+.pbar-w{display:flex;align-items:center;gap:6px}
+.pbar{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;min-width:60px}
+.pbar-f{height:100%;border-radius:3px;transition:width .6s ease}
+.pct-lbl{font-family:var(--mono);font-size:.6rem;min-width:32px;text-align:right}
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">
-    <div class="logo-icon">🪷</div>
+    <div class="logo-icon">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+      </svg>
+    </div>
     <div class="logo-text">
       <h1>Karnataka Marriage Incentive Scheme – Data Collection Monitor</h1>
-      <p>SC/ST Welfare Department · Live Google Sheets Feed · Auto-refreshes every 60s</p>
+      <p>SC/ST Welfare Dept · Live Google Sheets Feed · Auto-refreshes every 60s</p>
     </div>
   </div>
   <div class="hdr-right">
     <div class="live-badge"><div class="live-dot"></div>LIVE</div>
     <div class="timer" id="nextRefresh">Next refresh in 60s</div>
-    <button class="refresh-btn" onclick="loadAll()">⟳ Refresh Now</button>
+    <button class="refresh-btn" onclick="loadAll()">
+      <svg viewBox="0 0 24 24"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+      Refresh Now
+    </button>
   </div>
 </header>
 
 <main>
-  <!-- Status bar -->
   <div class="status-bar">
-    <span>●</span>
+    <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="currentColor"/></svg>
     <span id="statusText" class="s-load">Connecting to Google Sheets…</span>
-    <span style="margin-left:auto" id="lastUpdated"></span>
+    <span style="margin-left:auto;font-size:.65rem" id="lastUpdated"></span>
   </div>
 
-  <!-- KPI Strip -->
+  <!-- 7 KPI cards -->
   <div class="kpi-row">
+
     <div class="kpi" style="--kc:var(--a1)">
-      <div class="kpi-ico">📋</div>
+      <div class="kpi-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
       <div class="kpi-lbl">Total Responses</div>
       <div class="kpi-val" id="kTotal">—</div>
       <div class="kpi-sub">all districts · all schemes</div>
     </div>
+
     <div class="kpi" style="--kc:var(--a4)">
-      <div class="kpi-ico">📅</div>
+      <div class="kpi-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
       <div class="kpi-lbl">Today's Submissions</div>
       <div class="kpi-val" id="kToday">—</div>
       <div class="kpi-sub">surveys filed today</div>
     </div>
+
     <div class="kpi" style="--kc:var(--a2)">
-      <div class="kpi-ico">📍</div>
+      <div class="kpi-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 018 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 018-8z"/></svg></div>
       <div class="kpi-lbl">Districts Active</div>
       <div class="kpi-val" id="kDist">—</div>
       <div class="kpi-sub">of 31 Karnataka districts</div>
     </div>
+
     <div class="kpi" style="--kc:var(--a3)">
-      <div class="kpi-ico">🗺️</div>
-      <div class="kpi-lbl">Taluks Covered</div>
-      <div class="kpi-val" id="kTaluks">—</div>
-      <div class="kpi-sub">unique taluks surveyed</div>
+      <div class="kpi-ico"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <div class="kpi-lbl">Taluks Being Collected</div>
+      <div class="kpi-val" id="kTaluksActive">—</div>
+      <div class="kpi-sub">taluks with 1+ responses</div>
     </div>
+
+    <div class="kpi" style="--kc:var(--a5)">
+      <div class="kpi-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+      <div class="kpi-lbl">Taluks Yet to Start</div>
+      <div class="kpi-val" id="kTaluksPending">—</div>
+      <div class="kpi-sub">taluks with 0 collected</div>
+    </div>
+
     <div class="kpi" style="--kc:var(--a6)">
-      <div class="kpi-ico">🕵️</div>
+      <div class="kpi-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
       <div class="kpi-lbl">Active Surveyors</div>
       <div class="kpi-val" id="kSurveyors">—</div>
       <div class="kpi-sub">field staff submitting</div>
     </div>
-    <div class="kpi" style="--kc:var(--a5)">
-      <div class="kpi-ico">📊</div>
-      <div class="kpi-lbl">Overall Progress</div>
-      <div class="kpi-val" id="kProgress">—</div>
-      <div class="kpi-sub">collected vs targets</div>
+
+    <div class="kpi" style="--kc:var(--a4)">
+      <div class="kpi-ico"><svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
+      <div class="kpi-lbl">Total vs Collected</div>
+      <div class="kpi-val small" id="kProgress">—</div>
+      <div class="kpi-sub" id="kProgressPct">of total target</div>
     </div>
+
   </div>
 
   <!-- Timeline + Donut -->
@@ -253,7 +245,7 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
     </div>
   </div>
 
-  <!-- Horiz scheme bars + Surveyor leaderboard -->
+  <!-- Scheme bars + Surveyor leaderboard -->
   <div class="g2">
     <div class="card">
       <div class="card-hdr">
@@ -298,7 +290,9 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
       </select>
       <select id="fStatus" onchange="filterProgress()">
         <option value="">All Progress</option>
-        <option value="hi">≥ 80% done</option>
+        <option value="started">Being Collected (1+)</option>
+        <option value="zero">Yet to Start (0)</option>
+        <option value="hi">Over 80% done</option>
         <option value="mid">20–79%</option>
         <option value="lo">Below 20%</option>
       </select>
@@ -318,8 +312,12 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
 </main>
 
 <script>
-// ── Hardcoded Apps Script URL ──────────────────────────────────
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbw0nc93s8UgANeMTPdL8wBGyxqCM-cI1ehyQHMf272DVADvxntfz6C0toHvJBNL72NE/exec';
+// ─────────────────────────────────────────────────────────────────
+// IMPORTANT: After updating AppScript, paste your new deployment
+// URL below. The ?_= timestamp parameter busts Google's 6-hour
+// response cache so manual edits to the sheet reflect immediately.
+// ─────────────────────────────────────────────────────────────────
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbwGBt3U3CoUsk3xHwD36MMNh5E7dbYFRfALCiRm7UPc3i4Cifxf8kMshN1ef5279bDs/exec';
 
 const SC = {
   'Inter-Caste':     '#f97316',
@@ -333,7 +331,6 @@ const SC = {
 let progressData = [];
 let timerSec = 60, timerInterval;
 
-// ── Init ───────────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => { loadAll(); startTimer(); });
 
 function startTimer() {
@@ -350,9 +347,12 @@ function setStatus(msg, cls='s-load') {
   el.className = cls; el.textContent = msg;
 }
 
-// ── Fetch ──────────────────────────────────────────────────────
+// Cache-busting fetch — appends unique timestamp to every request
+// This bypasses Google's 6-hour CDN cache on Web App responses,
+// ensuring ANY manual edit to the sheet is visible within 60 seconds.
 async function gasGet(action) {
-  const res  = await fetch(`${GAS_URL}?action=${action}`);
+  const url = `${GAS_URL}?action=${action}&_=${Date.now()}`;
+  const res  = await fetch(url, { cache: 'no-store' });
   const json = await res.json();
   if (json.status !== 'ok') throw new Error(json.message || 'API error');
   return json.data;
@@ -373,28 +373,42 @@ async function loadAll() {
     renderSurveyors(surveyors);
     renderHeatmap(summary.district_breakdown || {});
     renderProgress(progress);
-    populateDistrictFilter(summary.district_breakdown || {});
+    populateDistrictFilter(progress);
     document.getElementById('lastUpdated').textContent =
       `Last updated: ${new Date().toLocaleTimeString()}`;
-    setStatus(`Connected · ${summary.total_responses} total responses · ${Object.keys(summary.district_breakdown||{}).length} districts active`, 's-ok');
+    setStatus(
+      `Connected · ${summary.total_responses} responses · last synced ${new Date().toLocaleTimeString()}`,
+      's-ok'
+    );
   } catch(e) {
     setStatus(`Connection error: ${e.message}`, 's-err');
   }
 }
 
-// ── KPIs ───────────────────────────────────────────────────────
+// ── KPIs ──────────────────────────────────────────────────────
 function renderKPIs(s, progress, surveyors) {
-  document.getElementById('kTotal').textContent    = (s.total_responses||0).toLocaleString();
-  document.getElementById('kToday').textContent    = (s.today_responses||0).toLocaleString();
-  document.getElementById('kDist').textContent     = Object.keys(s.district_breakdown||{}).length;
-  document.getElementById('kTaluks').textContent   = new Set(progress.map(r=>r.taluk)).size;
-  document.getElementById('kSurveyors').textContent= Object.keys(surveyors||{}).length;
-  const tot  = progress.reduce((a,r)=>a+r.target,0);
-  const done = progress.reduce((a,r)=>a+r.completed,0);
-  document.getElementById('kProgress').textContent = tot>0 ? Math.round((done/tot)*100)+'%' : '—';
+  document.getElementById('kTotal').textContent     = (s.total_responses||0).toLocaleString();
+  document.getElementById('kToday').textContent     = (s.today_responses||0).toLocaleString();
+  document.getElementById('kDist').textContent      = Object.keys(s.district_breakdown||{}).length;
+  document.getElementById('kSurveyors').textContent = Object.keys(surveyors||{}).length;
+
+  // Unique district|taluk combinations from progress targets
+  const allTaluks     = new Set(progress.map(r => r.district + '|' + r.taluk));
+  // Taluks where at least 1 response has been collected
+  const activeTaluks  = new Set(progress.filter(r => r.completed > 0).map(r => r.district + '|' + r.taluk));
+  const pendingCount  = allTaluks.size - activeTaluks.size;
+
+  document.getElementById('kTaluksActive').textContent  = activeTaluks.size;
+  document.getElementById('kTaluksPending').textContent = pendingCount;
+
+  // Total target vs total collected
+  const tot  = progress.reduce((a, r) => a + r.target, 0);
+  const done = progress.reduce((a, r) => a + r.completed, 0);
+  document.getElementById('kProgress').textContent  = tot > 0 ? `${done.toLocaleString()} / ${tot.toLocaleString()}` : '—';
+  document.getElementById('kProgressPct').textContent = tot > 0 ? `${Math.round((done/tot)*100)}% of total target` : 'of total target';
 }
 
-// ── Timeline ───────────────────────────────────────────────────
+// ── Timeline ──────────────────────────────────────────────────
 function renderTimeline(data) {
   const el = document.getElementById('timelineChart');
   if (!data||!data.length) { el.innerHTML='<div class="empty">No timeline data yet</div>'; return; }
@@ -404,20 +418,19 @@ function renderTimeline(data) {
   el.innerHTML = last.map(d => {
     const h = Math.max(4, Math.round((d.count/max)*88));
     return `<div class="tl-col">
-      <div class="tl-bar" style="height:${h}px" data-tip="${d.date}: ${d.count}"></div>
+      <div class="tl-bar" style="height:${h}px" title="${d.date}: ${d.count} responses"></div>
       <div class="tl-lbl">${d.date.slice(5)}</div>
     </div>`;
   }).join('');
 }
 
-// ── Scheme Donut ───────────────────────────────────────────────
+// ── Scheme Donut ──────────────────────────────────────────────
 function renderSchemeDonut(data) {
   const el = document.getElementById('schemeDonut');
   const entries = Object.entries(data).sort((a,b)=>b[1]-a[1]);
   if (!entries.length) { el.innerHTML='<div class="empty">No scheme data yet</div>'; return; }
   const total = entries.reduce((s,[,v])=>s+v,0)||1;
   document.getElementById('schemeBadge').textContent = `${entries.length} schemes · ${total} total`;
-
   const R=54,r=34,cx=70,cy=70;
   let startAngle=-Math.PI/2, paths='';
   entries.forEach(([name,cnt])=>{
@@ -431,14 +444,12 @@ function renderSchemeDonut(data) {
     paths+=`<path d="M${x1},${y1} A${R},${R} 0 ${lg},1 ${x2},${y2} L${xi1},${yi1} A${r},${r} 0 ${lg},0 ${xi2},${yi2} Z" fill="${col}" opacity=".88"><title>${name}: ${cnt}</title></path>`;
     startAngle+=angle;
   });
-
-  const svg=`<svg class="donut-svg" width="140" height="140" viewBox="0 0 140 140">
+  el.innerHTML=`<svg width="140" height="140" viewBox="0 0 140 140">
     ${paths}
     <text x="70" y="66" text-anchor="middle" font-family="Syne,sans-serif" font-size="18" font-weight="800" fill="#e2e8f0">${total}</text>
     <text x="70" y="80" text-anchor="middle" font-family="DM Mono,monospace" font-size="8" fill="#4e6080">TOTAL</text>
-  </svg>`;
-
-  const legend=`<div class="donut-legend">${entries.map(([name,cnt])=>{
+  </svg>
+  <div class="donut-legend">${entries.map(([name,cnt])=>{
     const col=SC[name]||'#4e6080';
     return `<div class="dl-row">
       <div class="dl-dot" style="background:${col}"></div>
@@ -447,11 +458,9 @@ function renderSchemeDonut(data) {
       <div class="dl-pct">${Math.round((cnt/total)*100)}%</div>
     </div>`;
   }).join('')}</div>`;
-
-  el.innerHTML = svg+legend;
 }
 
-// ── Horizontal bars ────────────────────────────────────────────
+// ── Horizontal bars ───────────────────────────────────────────
 function renderHorizBars(data) {
   const el = document.getElementById('horizBars');
   const entries = Object.entries(data).sort((a,b)=>b[1]-a[1]);
@@ -470,7 +479,7 @@ function renderHorizBars(data) {
   }).join('');
 }
 
-// ── Surveyors ──────────────────────────────────────────────────
+// ── Surveyors ─────────────────────────────────────────────────
 function renderSurveyors(data) {
   const el=document.getElementById('surveyorList');
   const entries=Object.entries(data).sort((a,b)=>b[1].count-a[1].count).slice(0,18);
@@ -486,7 +495,7 @@ function renderSurveyors(data) {
     </div>`).join('');
 }
 
-// ── Heatmap ────────────────────────────────────────────────────
+// ── Heatmap ───────────────────────────────────────────────────
 function renderHeatmap(data) {
   const el=document.getElementById('districtHeatmap');
   const entries=Object.entries(data).sort((a,b)=>b[1]-a[1]);
@@ -505,32 +514,31 @@ function renderHeatmap(data) {
   }).join('');
 }
 
-// ── Progress Table ─────────────────────────────────────────────
+// ── Progress Table ────────────────────────────────────────────
 function renderProgress(data) { progressData=data; filterProgress(); }
 
 function filterProgress() {
-  const df=document.getElementById('fDistrict').value;
-  const sf=document.getElementById('fScheme').value;
-  const tf=document.getElementById('fTier').value;
-  const stf=document.getElementById('fStatus').value;
-
-  let rows=progressData.filter(r=>{
-    if(df&&r.district!==df)return false;
-    if(sf&&r.scheme!==sf)return false;
-    if(tf&&r.tier!==tf)return false;
-    if(stf==='hi'&&r.pct_done<80)return false;
-    if(stf==='mid'&&(r.pct_done<20||r.pct_done>=80))return false;
-    if(stf==='lo'&&r.pct_done>=20)return false;
+  const df  = document.getElementById('fDistrict').value;
+  const sf  = document.getElementById('fScheme').value;
+  const tf  = document.getElementById('fTier').value;
+  const stf = document.getElementById('fStatus').value;
+  let rows  = progressData.filter(r => {
+    if (df  && r.district !== df) return false;
+    if (sf  && r.scheme   !== sf) return false;
+    if (tf  && r.tier     !== tf) return false;
+    if (stf === 'started' && r.completed < 1)                        return false;
+    if (stf === 'zero'    && r.completed > 0)                        return false;
+    if (stf === 'hi'      && r.pct_done < 80)                        return false;
+    if (stf === 'mid'     && (r.pct_done < 20 || r.pct_done >= 80)) return false;
+    if (stf === 'lo'      && r.pct_done >= 20)                       return false;
     return true;
   });
-
-  document.getElementById('progBadge').textContent=`${rows.length} rows`;
-  const tbody=document.getElementById('progBody');
-  if(!rows.length){tbody.innerHTML='<tr><td colspan="8" class="empty">No matching records</td></tr>';return;}
-
-  tbody.innerHTML=rows.map(r=>{
-    const col=r.pct_done>=80?'var(--a4)':r.pct_done>=40?'var(--a1)':'var(--a5)';
-    const sc=SC[r.scheme]||'#aaa';
+  document.getElementById('progBadge').textContent = `${rows.length} rows`;
+  const tbody = document.getElementById('progBody');
+  if (!rows.length) { tbody.innerHTML='<tr><td colspan="8" class="empty">No matching records</td></tr>'; return; }
+  tbody.innerHTML = rows.map(r => {
+    const col = r.pct_done>=80 ? 'var(--a4)' : r.pct_done>=40 ? 'var(--a1)' : r.completed>0 ? 'var(--a5)' : 'var(--muted)';
+    const sc  = SC[r.scheme]||'#aaa';
     return `<tr>
       <td>${r.district}</td>
       <td>${r.taluk}</td>
@@ -547,11 +555,15 @@ function filterProgress() {
   }).join('');
 }
 
-function populateDistrictFilter(districtMap) {
-  const sel=document.getElementById('fDistrict');
-  const existing=new Set([...sel.options].map(o=>o.value));
-  Object.keys(districtMap).sort().forEach(d=>{
-    if(!existing.has(d)){const o=document.createElement('option');o.value=o.textContent=d;sel.appendChild(o);}
+function populateDistrictFilter(progress) {
+  const sel = document.getElementById('fDistrict');
+  const existing = new Set([...sel.options].map(o => o.value));
+  [...new Set(progress.map(r => r.district))].sort().forEach(d => {
+    if (!existing.has(d)) {
+      const o = document.createElement('option');
+      o.value = o.textContent = d;
+      sel.appendChild(o);
+    }
   });
 }
 </script>
