@@ -79,7 +79,7 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:900px){.g21,.g2{grid-template-columns:1fr}}
 .card{background:var(--surf);border:1px solid var(--border);border-radius:14px;padding:18px;overflow:hidden}
-.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px}
+.card-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;gap:8px;flex-wrap:wrap}
 .card-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--muted)}
 .card-badge{font-size:.58rem;font-family:var(--mono);background:rgba(249,115,22,.08);color:var(--a1);border:1px solid rgba(249,115,22,.18);border-radius:20px;padding:2px 9px}
 .empty{text-align:center;padding:30px;color:var(--muted);font-size:.73rem}
@@ -97,20 +97,34 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
 .dl-name{font-size:.67rem;flex:1}
 .dl-val{font-size:.72rem;font-weight:700;font-family:var(--mono)}
 .dl-pct{font-size:.6rem;color:var(--muted);font-family:var(--mono)}
-/* HORIZ */
-.horiz-list{display:flex;flex-direction:column;gap:12px}
-.horiz-top{display:flex;justify-content:space-between;margin-bottom:4px}
-.horiz-name{font-size:.7rem;font-weight:600}
-.horiz-count{font-size:.7rem;font-weight:700;font-family:var(--mono)}
-.horiz-bar-bg{height:7px;background:rgba(255,255,255,.05);border-radius:4px;overflow:hidden}
-.horiz-bar-fill{height:100%;border-radius:4px;transition:width .6s ease}
+/* DISTRICT GAP ANALYSIS */
+.gap-list{display:flex;flex-direction:column;gap:8px;max-height:360px;overflow-y:auto}
+.gap-row{display:flex;flex-direction:column;gap:3px}
+.gap-top{display:flex;justify-content:space-between;align-items:center}
+.gap-name{font-size:.67rem;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:140px}
+.gap-nums{display:flex;gap:6px;align-items:center;font-family:var(--mono);font-size:.6rem}
+.gap-done{color:var(--a4);font-weight:700}
+.gap-rem{color:var(--a5)}
+.gap-pct{color:var(--muted)}
+.gap-bars{display:flex;height:6px;border-radius:3px;overflow:hidden;background:rgba(255,255,255,.04)}
+.gap-filled{height:100%;transition:width .6s ease}
+.gap-empty{height:100%;background:rgba(251,113,133,.15)}
 /* SURVEYOR */
-.sv-row{display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+.sv-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.sv-date-select{
+  background:#09111e;border:1px solid var(--border);color:var(--text);
+  border-radius:7px;padding:4px 10px;font-family:var(--mono);font-size:.63rem;cursor:pointer;flex:1;min-width:130px;
+}
+.sv-date-select:focus{border-color:var(--a2);outline:none}
+.sv-date-label{font-size:.6rem;color:var(--muted);font-family:var(--mono);white-space:nowrap}
+.sv-row{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04)}
 .sv-rank{font-size:.58rem;font-family:var(--mono);color:var(--muted);width:18px;text-align:center;flex-shrink:0}
-.sv-name{font-size:.72rem;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sv-bar-wrap{width:90px;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;flex-shrink:0}
-.sv-bar{height:100%;background:linear-gradient(90deg,var(--a2),var(--a3));border-radius:3px;transition:width .6s ease}
-.sv-count{font-family:var(--mono);font-size:.7rem;font-weight:700;color:var(--a2);min-width:26px;text-align:right;flex-shrink:0}
+.sv-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.sv-name{font-size:.7rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600}
+.sv-meta{font-size:.55rem;color:var(--muted);font-family:var(--mono)}
+.sv-bar-wrap{width:80px;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;flex-shrink:0}
+.sv-bar{height:100%;background:linear-gradient(90deg,var(--a2),var(--a3));border-radius:3px;transition:width .5s ease}
+.sv-count{font-family:var(--mono);font-size:.72rem;font-weight:700;color:var(--a2);min-width:28px;text-align:right;flex-shrink:0}
 /* HEATMAP */
 .heatmap{display:flex;flex-wrap:wrap;gap:8px}
 .hm-chip{border-radius:9px;padding:8px 13px;cursor:default;display:flex;flex-direction:column;gap:3px;transition:transform .15s;border:1px solid transparent}
@@ -139,6 +153,19 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
 .pbar{flex:1;height:5px;background:rgba(255,255,255,.05);border-radius:3px;overflow:hidden;min-width:60px}
 .pbar-f{height:100%;border-radius:3px;transition:width .6s ease}
 .pct-lbl{font-family:var(--mono);font-size:.6rem;min-width:32px;text-align:right}
+/* BAD ROWS PANEL */
+.bad-panel{border:1px solid rgba(251,113,133,.3);background:rgba(251,113,133,.04);border-radius:14px;padding:18px;overflow:hidden}
+.bad-count{font-size:.65rem;font-family:var(--mono);display:flex;gap:12px;margin-bottom:12px;flex-wrap:wrap;align-items:center}
+.bc-red{color:var(--a5);background:rgba(251,113,133,.1);border:1px solid rgba(251,113,133,.25);border-radius:6px;padding:3px 10px}
+.bc-yellow{color:var(--a6);background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25);border-radius:6px;padding:3px 10px}
+.bc-note{color:var(--muted);font-size:.6rem}
+.bad-tbl{width:100%;border-collapse:collapse;font-size:.66rem}
+.bad-tbl th{padding:7px 9px;text-align:left;font-size:.56rem;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);letter-spacing:.07em;white-space:nowrap}
+.bad-tbl td{padding:6px 9px;border-bottom:1px solid rgba(255,255,255,.03);font-family:var(--mono);vertical-align:middle}
+.bad-tbl tr:hover td{background:rgba(255,255,255,.02)}
+.sev-red{display:inline-block;background:#FF4444;color:#fff;border-radius:4px;padding:1px 8px;font-size:.56rem;font-weight:700;letter-spacing:.04em}
+.sev-yellow{display:inline-block;background:#FFCC44;color:#111;border-radius:4px;padding:1px 8px;font-size:.56rem;font-weight:700;letter-spacing:.04em}
+.row-num{color:var(--a3);font-weight:700}
 </style>
 </head>
 <body>
@@ -173,58 +200,75 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
     <span style="margin-left:auto;font-size:.65rem" id="lastUpdated"></span>
   </div>
 
-  <!-- 7 KPI cards -->
+  <!-- KPI row -->
   <div class="kpi-row">
-
     <div class="kpi" style="--kc:var(--a1)">
-      <div class="kpi-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></div>
+      <div class="kpi-ico"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
       <div class="kpi-lbl">Total Responses</div>
       <div class="kpi-val" id="kTotal">—</div>
       <div class="kpi-sub">all districts · all schemes</div>
     </div>
-
     <div class="kpi" style="--kc:var(--a4)">
-      <div class="kpi-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <div class="kpi-ico"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
       <div class="kpi-lbl">Today's Submissions</div>
       <div class="kpi-val" id="kToday">—</div>
       <div class="kpi-sub">surveys filed today</div>
     </div>
-
     <div class="kpi" style="--kc:var(--a2)">
       <div class="kpi-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 018 8c0 5.25-8 14-8 14S4 15.25 4 10a8 8 0 018-8z"/></svg></div>
       <div class="kpi-lbl">Districts Active</div>
       <div class="kpi-val" id="kDist">—</div>
       <div class="kpi-sub">of 31 Karnataka districts</div>
     </div>
-
     <div class="kpi" style="--kc:var(--a3)">
       <div class="kpi-ico"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
       <div class="kpi-lbl">Taluks Being Collected</div>
       <div class="kpi-val" id="kTaluksActive">—</div>
       <div class="kpi-sub">taluks with 1+ responses</div>
     </div>
-
     <div class="kpi" style="--kc:var(--a5)">
       <div class="kpi-ico"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
       <div class="kpi-lbl">Taluks Yet to Start</div>
       <div class="kpi-val" id="kTaluksPending">—</div>
       <div class="kpi-sub">taluks with 0 collected</div>
     </div>
-
     <div class="kpi" style="--kc:var(--a6)">
       <div class="kpi-ico"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
       <div class="kpi-lbl">Active Surveyors</div>
       <div class="kpi-val" id="kSurveyors">—</div>
       <div class="kpi-sub">field staff submitting</div>
     </div>
-
     <div class="kpi" style="--kc:var(--a4)">
       <div class="kpi-ico"><svg viewBox="0 0 24 24"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg></div>
       <div class="kpi-lbl">Total vs Collected</div>
       <div class="kpi-val small" id="kProgress">—</div>
       <div class="kpi-sub" id="kProgressPct">of total target</div>
     </div>
+  </div>
 
+  <!-- BAD ROWS PANEL — only shown when issues exist -->
+  <div class="bad-panel" id="badPanel" style="display:none">
+    <div class="card-hdr">
+      <div class="card-title" style="color:var(--a5)">⚠ Row Audit — Responses Not Counting Towards Targets</div>
+      <div class="card-badge" style="background:rgba(251,113,133,.1);color:var(--a5);border-color:rgba(251,113,133,.3)" id="badBadge">0 issues</div>
+    </div>
+    <div class="bad-count">
+      <span class="bc-red" id="bcRed">0 RED</span>
+      <span class="bc-yellow" id="bcYellow">0 YELLOW</span>
+      <span class="bc-note">RED = district/taluk unmatched in targets &nbsp;|&nbsp; YELLOW = scheme mismatch &nbsp;|&nbsp; These rows are highlighted in the Google Sheet. Run <code style="color:var(--a3)">flagBadRows()</code> in Apps Script to refresh.</span>
+    </div>
+    <div style="overflow-x:auto;max-height:300px;overflow-y:auto">
+      <table class="bad-tbl">
+        <thead>
+          <tr>
+            <th>Sheet Row</th><th>App ID</th><th>Date</th><th>Severity</th>
+            <th>Matched District</th><th>Matched Taluk</th><th>Matched Scheme</th>
+            <th>Raw District</th><th>Raw Taluk</th><th>Reason</th>
+          </tr>
+        </thead>
+        <tbody id="badBody"></tbody>
+      </table>
+    </div>
   </div>
 
   <!-- Timeline + Donut -->
@@ -245,19 +289,27 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
     </div>
   </div>
 
-  <!-- Scheme bars + Surveyor leaderboard -->
+  <!-- District Gap Analysis + Surveyor Leaderboard -->
   <div class="g2">
     <div class="card">
       <div class="card-hdr">
-        <div class="card-title">Responses by Scheme Type</div>
-        <div class="card-badge" id="horizBadge">All Schemes</div>
+        <div class="card-title">District Gap Analysis — Target vs Collected</div>
+        <div class="card-badge" id="gapBadge">All Districts</div>
       </div>
-      <div class="horiz-list" id="horizBars"><div class="empty">Loading…</div></div>
+      <div class="gap-list" id="gapList"><div class="empty">Loading…</div></div>
     </div>
+
     <div class="card">
       <div class="card-hdr">
         <div class="card-title">Surveyor Leaderboard</div>
-        <div class="card-badge" id="svBadge">By submissions</div>
+        <div class="card-badge" id="svBadge">All time</div>
+      </div>
+      <!-- DATE DROPDOWN for surveyor filter -->
+      <div class="sv-toolbar">
+        <span class="sv-date-label">Filter by date:</span>
+        <select class="sv-date-select" id="svDateSelect" onchange="onSurveyorDateChange()">
+          <option value="">All dates (cumulative)</option>
+        </select>
       </div>
       <div id="surveyorList"><div class="empty">Loading…</div></div>
     </div>
@@ -312,12 +364,7 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
 </main>
 
 <script>
-// ─────────────────────────────────────────────────────────────────
-// IMPORTANT: After updating AppScript, paste your new deployment
-// URL below. The ?_= timestamp parameter busts Google's 6-hour
-// response cache so manual edits to the sheet reflect immediately.
-// ─────────────────────────────────────────────────────────────────
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbz-UeUY_dAye0cw7RuMFDXhqqphs1ZoYDlrP8vu_zLBJS57CNsk6D_W5LwE3lYd93WT/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzkZC6imVo-ScrCJnI7KCi6iM39h99KgylrPmII_Zme-I-w-CNDiszaWlJqKl23gLMm/exec';
 
 const SC = {
   'Inter-Caste':     '#f97316',
@@ -347,11 +394,8 @@ function setStatus(msg, cls='s-load') {
   el.className = cls; el.textContent = msg;
 }
 
-// Cache-busting fetch — appends unique timestamp to every request
-// This bypasses Google's 6-hour CDN cache on Web App responses,
-// ensuring ANY manual edit to the sheet is visible within 60 seconds.
-async function gasGet(action) {
-  const url = `${GAS_URL}?action=${action}&_=${Date.now()}`;
+async function gasGet(action, extra='') {
+  const url = `${GAS_URL}?action=${action}${extra}&_=${Date.now()}`;
   const res  = await fetch(url, { cache: 'no-store' });
   const json = await res.json();
   if (json.status !== 'ok') throw new Error(json.message || 'API error');
@@ -362,18 +406,34 @@ async function loadAll() {
   setStatus('Fetching live data from Google Sheets…', 's-load');
   startTimer();
   try {
-    const [summary, progress, surveyors, timeline] = await Promise.all([
-      gasGet('summary'), gasGet('progress'), gasGet('surveyor'), gasGet('timeline')
+    // Load surveyor dates for dropdown first
+    const [summary, progress, timeline, badRows, surveyorDates] = await Promise.all([
+      gasGet('summary'),
+      gasGet('progress'),
+      gasGet('timeline'),
+      gasGet('bad_rows').catch(() => []),
+      gasGet('survey_dates').catch(() => [])
     ]);
+
     progressData = progress;
+
+    // Populate date dropdown
+    populateSurveyorDates(surveyorDates);
+
+    // Load surveyors with current date filter
+    const selectedDate = document.getElementById('svDateSelect').value;
+    const surveyors = await gasGet('surveyor', selectedDate ? `&date=${encodeURIComponent(selectedDate)}` : '');
+
     renderKPIs(summary, progress, surveyors);
     renderTimeline(timeline);
     renderSchemeDonut(summary.scheme_breakdown || {});
-    renderHorizBars(summary.scheme_breakdown || {});
-    renderSurveyors(surveyors);
+    renderGapAnalysis(progress);
+    renderSurveyors(surveyors, selectedDate);
     renderHeatmap(summary.district_breakdown || {});
     renderProgress(progress);
+    renderBadRows(badRows || []);
     populateDistrictFilter(progress);
+
     document.getElementById('lastUpdated').textContent =
       `Last updated: ${new Date().toLocaleTimeString()}`;
     setStatus(
@@ -385,26 +445,51 @@ async function loadAll() {
   }
 }
 
+// ── When surveyor date dropdown changes ───────────────────────
+async function onSurveyorDateChange() {
+  const selectedDate = document.getElementById('svDateSelect').value;
+  document.getElementById('surveyorList').innerHTML = '<div class="empty">Loading…</div>';
+  try {
+    const surveyors = await gasGet('surveyor', selectedDate ? `&date=${encodeURIComponent(selectedDate)}` : '');
+    renderSurveyors(surveyors, selectedDate);
+  } catch(e) {
+    document.getElementById('surveyorList').innerHTML = `<div class="empty">Error: ${e.message}</div>`;
+  }
+}
+
+// ── Populate surveyor date dropdown ──────────────────────────
+function populateSurveyorDates(dates) {
+  const sel = document.getElementById('svDateSelect');
+  const current = sel.value;
+  // Keep first "All dates" option, clear the rest
+  while (sel.options.length > 1) sel.remove(1);
+  (dates || []).forEach(d => {
+    const o = document.createElement('option');
+    o.value = d;
+    // Format nicely: 2025-03-07 → 07 Mar 2025
+    try {
+      const dt = new Date(d + 'T00:00:00');
+      o.textContent = dt.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+    } catch(e) { o.textContent = d; }
+    sel.appendChild(o);
+  });
+  // Restore previous selection if still valid
+  if (current && [...sel.options].some(o => o.value === current)) sel.value = current;
+}
+
 // ── KPIs ──────────────────────────────────────────────────────
 function renderKPIs(s, progress, surveyors) {
   document.getElementById('kTotal').textContent     = (s.total_responses||0).toLocaleString();
   document.getElementById('kToday').textContent     = (s.today_responses||0).toLocaleString();
   document.getElementById('kDist').textContent      = Object.keys(s.district_breakdown||{}).length;
   document.getElementById('kSurveyors').textContent = Object.keys(surveyors||{}).length;
-
-  // Unique district|taluk combinations from progress targets
-  const allTaluks     = new Set(progress.map(r => r.district + '|' + r.taluk));
-  // Taluks where at least 1 response has been collected
-  const activeTaluks  = new Set(progress.filter(r => r.completed > 0).map(r => r.district + '|' + r.taluk));
-  const pendingCount  = allTaluks.size - activeTaluks.size;
-
+  const allTaluks    = new Set(progress.map(r => r.district + '|' + r.taluk));
+  const activeTaluks = new Set(progress.filter(r => r.completed > 0).map(r => r.district + '|' + r.taluk));
   document.getElementById('kTaluksActive').textContent  = activeTaluks.size;
-  document.getElementById('kTaluksPending').textContent = pendingCount;
-
-  // Total target vs total collected
-  const tot  = progress.reduce((a, r) => a + r.target, 0);
-  const done = progress.reduce((a, r) => a + r.completed, 0);
-  document.getElementById('kProgress').textContent  = tot > 0 ? `${done.toLocaleString()} / ${tot.toLocaleString()}` : '—';
+  document.getElementById('kTaluksPending').textContent = allTaluks.size - activeTaluks.size;
+  const tot  = progress.reduce((a,r) => a + r.target, 0);
+  const done = progress.reduce((a,r) => a + r.completed, 0);
+  document.getElementById('kProgress').textContent    = tot > 0 ? `${done.toLocaleString()} / ${tot.toLocaleString()}` : '—';
   document.getElementById('kProgressPct').textContent = tot > 0 ? `${Math.round((done/tot)*100)}% of total target` : 'of total target';
 }
 
@@ -460,39 +545,74 @@ function renderSchemeDonut(data) {
   }).join('')}</div>`;
 }
 
-// ── Horizontal bars ───────────────────────────────────────────
-function renderHorizBars(data) {
-  const el = document.getElementById('horizBars');
-  const entries = Object.entries(data).sort((a,b)=>b[1]-a[1]);
-  if (!entries.length) { el.innerHTML='<div class="empty">No data yet</div>'; return; }
-  const max=entries[0][1]||1;
-  document.getElementById('horizBadge').textContent=`${entries.length} scheme types`;
-  el.innerHTML=entries.map(([name,cnt])=>{
-    const col=SC[name]||'#4e6080';
-    return `<div>
-      <div class="horiz-top">
-        <div class="horiz-name" style="color:${col}">${name}</div>
-        <div class="horiz-count" style="color:${col}">${cnt}</div>
+// ── District Gap Analysis ─────────────────────────────────────
+function renderGapAnalysis(progress) {
+  const el = document.getElementById('gapList');
+  if (!progress||!progress.length) { el.innerHTML='<div class="empty">No data yet</div>'; return; }
+  const byDist = {};
+  progress.forEach(r => {
+    if (!byDist[r.district]) byDist[r.district] = { target:0, completed:0 };
+    byDist[r.district].target    += r.target;
+    byDist[r.district].completed += r.completed;
+  });
+  const entries = Object.entries(byDist)
+    .map(([d,v]) => ({ d, ...v, pct: v.target > 0 ? Math.round((v.completed/v.target)*100) : 0 }))
+    .sort((a,b) => a.pct - b.pct); // worst first
+  document.getElementById('gapBadge').textContent = `${entries.length} districts`;
+  el.innerHTML = entries.map(e => {
+    const col = e.pct>=80 ? 'var(--a4)' : e.pct>=40 ? 'var(--a1)' : e.pct>0 ? 'var(--a5)' : 'var(--muted)';
+    const rem = e.target - e.completed;
+    return `<div class="gap-row">
+      <div class="gap-top">
+        <div class="gap-name" title="${e.d}">${e.d}</div>
+        <div class="gap-nums">
+          <span class="gap-done">${e.completed}</span>
+          <span style="color:var(--border)">/</span>
+          <span style="color:var(--muted)">${e.target}</span>
+          <span class="gap-rem">−${rem}</span>
+          <span class="gap-pct">${e.pct}%</span>
+        </div>
       </div>
-      <div class="horiz-bar-bg"><div class="horiz-bar-fill" style="width:${Math.round((cnt/max)*100)}%;background:${col}"></div></div>
+      <div class="gap-bars">
+        <div class="gap-filled" style="width:${e.pct}%;background:${col}"></div>
+        <div class="gap-empty" style="width:${100-e.pct}%"></div>
+      </div>
     </div>`;
   }).join('');
 }
 
-// ── Surveyors ─────────────────────────────────────────────────
-function renderSurveyors(data) {
-  const el=document.getElementById('surveyorList');
-  const entries=Object.entries(data).sort((a,b)=>b[1].count-a[1].count).slice(0,18);
-  if (!entries.length) { el.innerHTML='<div class="empty">No surveyor data yet</div>'; return; }
-  const max=entries[0][1].count||1;
-  document.getElementById('svBadge').textContent=`${Object.keys(data).length} surveyors`;
-  el.innerHTML=entries.map(([name,info],i)=>`
-    <div class="sv-row">
+// ── Surveyor Leaderboard ──────────────────────────────────────
+function renderSurveyors(data, selectedDate) {
+  const el = document.getElementById('surveyorList');
+  const entries = Object.entries(data).sort((a,b) => b[1].count - a[1].count).slice(0, 20);
+  if (!entries.length) {
+    el.innerHTML = `<div class="empty">${selectedDate ? 'No submissions on this date' : 'No surveyor data yet'}</div>`;
+    return;
+  }
+  const max = entries[0][1].count || 1;
+  const totalSurveyors = Object.keys(data).length;
+  const totalCount = Object.values(data).reduce((s,v) => s+v.count, 0);
+
+  // Badge: show context based on filter
+  document.getElementById('svBadge').textContent = selectedDate
+    ? `${totalSurveyors} active · ${totalCount} submissions`
+    : `${totalSurveyors} surveyors total`;
+
+  el.innerHTML = entries.map(([name, info], i) => {
+    const distList = (info.districts||[]).slice(0,3).join(', ');
+    const extra    = (info.districts||[]).length > 3 ? ` +${info.districts.length-3}` : '';
+    const lastSub  = info.last_submission ? info.last_submission.slice(5) : '—';
+    const barPct   = Math.round((info.count/max)*100);
+    return `<div class="sv-row">
       <div class="sv-rank">#${i+1}</div>
-      <div class="sv-name" title="${name}">${name}</div>
-      <div class="sv-bar-wrap"><div class="sv-bar" style="width:${Math.round((info.count/max)*100)}%"></div></div>
+      <div class="sv-info">
+        <div class="sv-name" title="${name}">${name}</div>
+        <div class="sv-meta">${distList}${extra}${!selectedDate ? ` · last: ${lastSub}` : ''}</div>
+      </div>
+      <div class="sv-bar-wrap"><div class="sv-bar" style="width:${barPct}%"></div></div>
       <div class="sv-count">${info.count}</div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
 }
 
 // ── Heatmap ───────────────────────────────────────────────────
@@ -514,6 +634,30 @@ function renderHeatmap(data) {
   }).join('');
 }
 
+// ── Bad Rows Panel ────────────────────────────────────────────
+function renderBadRows(rows) {
+  const panel = document.getElementById('badPanel');
+  if (!rows||!rows.length) { panel.style.display='none'; return; }
+  panel.style.display='block';
+  const reds    = rows.filter(r=>r.severity==='RED');
+  const yellows = rows.filter(r=>r.severity==='YELLOW');
+  document.getElementById('badBadge').textContent = `${rows.length} issue${rows.length!==1?'s':''}`;
+  document.getElementById('bcRed').textContent    = `${reds.length} RED — District/Taluk not in targets`;
+  document.getElementById('bcYellow').textContent = `${yellows.length} YELLOW — Scheme mismatch`;
+  document.getElementById('badBody').innerHTML = rows.map(r => `<tr>
+    <td class="row-num">Row ${r.row}</td>
+    <td style="color:var(--text)">${r.app_id||'—'}</td>
+    <td style="color:var(--muted)">${r.timestamp||'—'}</td>
+    <td><span class="${r.severity==='RED'?'sev-red':'sev-yellow'}">${r.severity}</span></td>
+    <td style="color:var(--a2)">${r.district}</td>
+    <td style="color:var(--a2)">${r.taluk}</td>
+    <td style="color:${SC[r.scheme]||'#aaa'}">${r.scheme}</td>
+    <td style="color:var(--muted)">${r.raw_dist||'—'}</td>
+    <td style="color:var(--muted)">${r.raw_taluk||'—'}</td>
+    <td style="color:var(--a5);font-size:.6rem;white-space:normal;max-width:200px">${r.reason}</td>
+  </tr>`).join('');
+}
+
 // ── Progress Table ────────────────────────────────────────────
 function renderProgress(data) { progressData=data; filterProgress(); }
 
@@ -523,25 +667,24 @@ function filterProgress() {
   const tf  = document.getElementById('fTier').value;
   const stf = document.getElementById('fStatus').value;
   let rows  = progressData.filter(r => {
-    if (df  && r.district !== df) return false;
-    if (sf  && r.scheme   !== sf) return false;
-    if (tf  && r.tier     !== tf) return false;
-    if (stf === 'started' && r.completed < 1)                        return false;
-    if (stf === 'zero'    && r.completed > 0)                        return false;
-    if (stf === 'hi'      && r.pct_done < 80)                        return false;
-    if (stf === 'mid'     && (r.pct_done < 20 || r.pct_done >= 80)) return false;
-    if (stf === 'lo'      && r.pct_done >= 20)                       return false;
+    if (df  && r.district!==df) return false;
+    if (sf  && r.scheme!==sf)   return false;
+    if (tf  && r.tier!==tf)     return false;
+    if (stf==='started' && r.completed<1)                        return false;
+    if (stf==='zero'    && r.completed>0)                        return false;
+    if (stf==='hi'      && r.pct_done<80)                        return false;
+    if (stf==='mid'     && (r.pct_done<20||r.pct_done>=80))      return false;
+    if (stf==='lo'      && r.pct_done>=20)                       return false;
     return true;
   });
   document.getElementById('progBadge').textContent = `${rows.length} rows`;
   const tbody = document.getElementById('progBody');
   if (!rows.length) { tbody.innerHTML='<tr><td colspan="8" class="empty">No matching records</td></tr>'; return; }
   tbody.innerHTML = rows.map(r => {
-    const col = r.pct_done>=80 ? 'var(--a4)' : r.pct_done>=40 ? 'var(--a1)' : r.completed>0 ? 'var(--a5)' : 'var(--muted)';
+    const col = r.pct_done>=80?'var(--a4)':r.pct_done>=40?'var(--a1)':r.completed>0?'var(--a5)':'var(--muted)';
     const sc  = SC[r.scheme]||'#aaa';
     return `<tr>
-      <td>${r.district}</td>
-      <td>${r.taluk}</td>
+      <td>${r.district}</td><td>${r.taluk}</td>
       <td><span style="color:${sc}">${r.scheme}</span></td>
       <td><span class="tier-b t-${r.tier[0]}">${r.tier}</span></td>
       <td style="font-family:var(--mono)">${r.target}</td>
@@ -557,8 +700,8 @@ function filterProgress() {
 
 function populateDistrictFilter(progress) {
   const sel = document.getElementById('fDistrict');
-  const existing = new Set([...sel.options].map(o => o.value));
-  [...new Set(progress.map(r => r.district))].sort().forEach(d => {
+  const existing = new Set([...sel.options].map(o=>o.value));
+  [...new Set(progress.map(r=>r.district))].sort().forEach(d => {
     if (!existing.has(d)) {
       const o = document.createElement('option');
       o.value = o.textContent = d;
