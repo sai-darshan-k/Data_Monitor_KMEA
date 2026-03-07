@@ -255,7 +255,7 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
     <div class="bad-count">
       <span class="bc-red" id="bcRed">0 RED</span>
       <span class="bc-yellow" id="bcYellow">0 YELLOW</span>
-      <span class="bc-note">RED = district/taluk unmatched in targets &nbsp;|&nbsp; YELLOW = scheme mismatch &nbsp;|&nbsp; These rows are highlighted in the Google Sheet. Run <code style="color:var(--a3)">flagBadRows()</code> in Apps Script to refresh.</span>
+      <span class="bc-note">RED = district/taluk unmatched in targets &nbsp;|&nbsp; YELLOW = scheme mismatch &nbsp;|&nbsp; </span>
     </div>
     <div style="overflow-x:auto;max-height:300px;overflow-y:auto">
       <table class="bad-tbl">
@@ -417,18 +417,18 @@ async function loadAll() {
 
     progressData = progress;
 
-    // Populate date dropdown
-    populateSurveyorDates(surveyorDates);
+    // ── Populate date dropdown and auto-select the most recent date ──
+    // Returns the date that was selected (most recent, or preserved previous)
+    const defaultDate = populateSurveyorDates(surveyorDates);
 
-    // Load surveyors with current date filter
-    const selectedDate = document.getElementById('svDateSelect').value;
-    const surveyors = await gasGet('surveyor', selectedDate ? `&date=${encodeURIComponent(selectedDate)}` : '');
+    // Load surveyors using the auto-selected most recent date
+    const surveyors = await gasGet('surveyor', defaultDate ? `&date=${encodeURIComponent(defaultDate)}` : '');
 
     renderKPIs(summary, progress, surveyors);
     renderTimeline(timeline);
     renderSchemeDonut(summary.scheme_breakdown || {});
     renderGapAnalysis(progress);
-    renderSurveyors(surveyors, selectedDate);
+    renderSurveyors(surveyors, defaultDate);
     renderHeatmap(summary.district_breakdown || {});
     renderProgress(progress);
     renderBadRows(badRows || []);
@@ -458,23 +458,45 @@ async function onSurveyorDateChange() {
 }
 
 // ── Populate surveyor date dropdown ──────────────────────────
+// Auto-selects the most recent date (index 1, right after "All dates").
+// Preserves the user's existing selection if they've already chosen something.
+// Returns the currently selected date value (string or '').
 function populateSurveyorDates(dates) {
   const sel = document.getElementById('svDateSelect');
-  const current = sel.value;
-  // Keep first "All dates" option, clear the rest
+  const previousValue = sel.value; // remember what the user had picked
+  const hadUserChoice = previousValue !== '';
+
+  // Rebuild all options except the first "All dates" option
   while (sel.options.length > 1) sel.remove(1);
-  (dates || []).forEach(d => {
+
+  // dates should arrive newest-first from the API; if not, sort descending
+  const sorted = (dates || []).slice().sort((a, b) => b.localeCompare(a));
+
+  sorted.forEach(d => {
     const o = document.createElement('option');
     o.value = d;
-    // Format nicely: 2025-03-07 → 07 Mar 2025
     try {
       const dt = new Date(d + 'T00:00:00');
-      o.textContent = dt.toLocaleDateString('en-IN', { day:'2-digit', month:'short', year:'numeric' });
+      o.textContent = dt.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
     } catch(e) { o.textContent = d; }
     sel.appendChild(o);
   });
-  // Restore previous selection if still valid
-  if (current && [...sel.options].some(o => o.value === current)) sel.value = current;
+
+  // If the user had already chosen a date and it still exists, keep it
+  if (hadUserChoice && [...sel.options].some(o => o.value === previousValue)) {
+    sel.value = previousValue;
+    return previousValue;
+  }
+
+  // Otherwise default to the most recent date (first item after "All dates")
+  if (sorted.length > 0) {
+    sel.value = sorted[0];
+    return sorted[0];
+  }
+
+  // No dates available — fall back to "All dates"
+  sel.value = '';
+  return '';
 }
 
 // ── KPIs ──────────────────────────────────────────────────────
