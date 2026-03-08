@@ -364,7 +364,7 @@ main{position:relative;z-index:1;max-width:1700px;margin:0 auto;padding:20px 28p
 </main>
 
 <script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbzkZC6imVo-ScrCJnI7KCi6iM39h99KgylrPmII_Zme-I-w-CNDiszaWlJqKl23gLMm/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbxTSJVdlb4toj3RNDDMTQKvwLcVKrlUp-qQiN4GyLbhY1ZsqTfmsr-jiH1Usf2yvNsB/exec';
 
 const SC = {
   'Inter-Caste':     '#f97316',
@@ -625,10 +625,14 @@ function renderSurveyors(data, selectedDate) {
     const extra    = (info.districts||[]).length > 3 ? ` +${info.districts.length-3}` : '';
     const lastSub  = info.last_submission ? info.last_submission.slice(5) : '—';
     const barPct   = Math.round((info.count/max)*100);
+    // Use the raw name exactly as it comes — Kannada, spaces, anything
+    const displayName = (name && name.trim() !== '' && name !== 'undefined' && name !== 'null')
+      ? name.trim()
+      : `(no name · row ${info.first_row || '?'})`;
     return `<div class="sv-row">
       <div class="sv-rank">#${i+1}</div>
       <div class="sv-info">
-        <div class="sv-name" title="${name}">${name}</div>
+        <div class="sv-name" title="${displayName}">${displayName}</div>
         <div class="sv-meta">${distList}${extra}${!selectedDate ? ` · last: ${lastSub}` : ''}</div>
       </div>
       <div class="sv-bar-wrap"><div class="sv-bar" style="width:${barPct}%"></div></div>
