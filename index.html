@@ -281,7 +281,7 @@ main{max-width:1800px;margin:0 auto;padding:24px 28px;display:flex;flex-directio
 <main>
   <div class="status-bar">
     <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="3" fill="currentColor"/></svg>
-    <span id="statusText" class="s-load">Connecting to Google Sheets…</span>
+    <span id="statusText" class="s-load">Connecting to Database…</span>
     <span style="margin-left:auto;font-size:.65rem;color:var(--muted)" id="lastUpdated"></span>
   </div>
 
@@ -493,7 +493,7 @@ async function gasGet(action, extra='') {
 }
 
 async function loadAll() {
-  setStatus('Fetching live data from Google Sheets…', 's-load');
+  setStatus('Fetching live data from Database…', 's-load');
   startTimer();
   try {
     const [summary, progress, timeline, badRows, surveyorDates] = await Promise.all([
