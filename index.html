@@ -118,10 +118,11 @@ main{max-width:1800px;margin:0 auto;padding:24px 28px;display:flex;flex-directio
 @media(max-width:768px){.g21,.g2{grid-template-columns:1fr}}
 
 /* ── Timeline ── */
-.tl-wrap{display:flex;align-items:flex-end;gap:4px;height:104px;overflow-x:auto;padding-bottom:2px;padding-top:4px}
+.tl-wrap{display:flex;align-items:flex-end;gap:4px;height:130px;overflow-x:auto;padding-bottom:2px;padding-top:4px}
 .tl-col{display:flex;flex-direction:column;align-items:center;gap:3px;flex-shrink:0;width:24px;cursor:default;position:relative}
 .tl-bar{width:16px;border-radius:4px 4px 0 0;background:linear-gradient(180deg,var(--a1),#c04010);transition:opacity .15s,transform .15s}
 .tl-bar:hover{opacity:.75;transform:scaleY(1.04)}
+.tl-cnt{font-size:.44rem;color:var(--a1);font-family:var(--mono);font-weight:600;text-align:center;line-height:1;margin-bottom:1px;white-space:nowrap}
 .tl-lbl{font-size:.48rem;color:var(--muted);font-family:var(--mono);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;width:100%;text-align:center}
 
 /* ── Donut ── */
@@ -582,8 +583,9 @@ function renderTimeline(data) {
   const max  = Math.max(...last.map(d=>d.count), 1);
   document.getElementById('tlBadge').textContent = `${last.length} days`;
   el.innerHTML = last.map(d => {
-    const h = Math.max(4, Math.round((d.count/max)*96));
+    const h = Math.max(4, Math.round((d.count/max)*88));
     return `<div class="tl-col">
+      <div class="tl-cnt">${d.count}</div>
       <div class="tl-bar" style="height:${h}px" title="${d.date}: ${d.count} responses"></div>
       <div class="tl-lbl">${d.date.slice(5)}</div>
     </div>`;
