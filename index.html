@@ -204,6 +204,19 @@ main{max-width:1800px;margin:0 auto;padding:24px 28px;display:flex;flex-directio
 }
 .ptbl td{padding:8px 12px;border-bottom:1px solid var(--border);white-space:nowrap;vertical-align:middle;color:var(--text)}
 .ptbl tr:hover td{background:var(--bg)}
+/* ── District subtotal row ── */
+.ptbl tr.dist-subtotal td{
+  background:#f0f4ff;
+  border-top:2px solid var(--border2);
+  border-bottom:2px solid var(--border2);
+  font-weight:700;
+  font-size:.68rem;
+}
+.ptbl tr.dist-subtotal:hover td{background:#e8edf8}
+.dist-sub-label{
+  font-size:.56rem;font-family:var(--mono);text-transform:uppercase;
+  letter-spacing:.08em;color:var(--a3);font-weight:700;margin-left:4px;
+}
 .tier-b{font-size:.56rem;font-family:var(--mono);border-radius:5px;padding:2px 7px;font-weight:700}
 .t-H{background:rgba(232,93,37,.1);color:var(--a1)}
 .t-M{background:rgba(124,92,191,.1);color:var(--a3)}
@@ -453,7 +466,7 @@ main{max-width:1800px;margin:0 auto;padding:24px 28px;display:flex;flex-directio
 </main>
 
 <script>
-const GAS_URL = 'https://script.google.com/macros/s/AKfycbxTSJVdlb4toj3RNDDMTQKvwLcVKrlUp-qQiN4GyLbhY1ZsqTfmsr-jiH1Usf2yvNsB/exec';
+const GAS_URL = 'https://script.google.com/macros/s/AKfycbzlcO7NpiVN7pmwdqvgyAP6IhBjMsVIpbJo_2ynWXXop1kiu7f8GrqBLyP25zl8b2L2/exec';
 
 const SC = {
   'Inter-Caste':     '#e85d25',
@@ -762,13 +775,48 @@ function filterProgress() {
     if (stf==='lo'      && r.pct_done>=20)                    return false;
     return true;
   });
+
   document.getElementById('progBadge').textContent = `${rows.length} rows`;
   const tbody = document.getElementById('progBody');
   if (!rows.length) { tbody.innerHTML='<tr><td colspan="8" class="empty">No matching records</td></tr>'; return; }
-  tbody.innerHTML = rows.map(r => {
+
+  // ── Build district+scheme subtotals ──────────────────────────
+  // Group rows by district → scheme for subtotal injection
+  // We'll track current district+scheme combo and insert a subtotal row
+  // whenever the district+scheme group changes (after all its taluk rows).
+
+  // Step 1: build subtotal map: { "district||scheme" → {target, completed} }
+  const subtotalMap = {};
+  rows.forEach(r => {
+    const key = r.district + '||' + r.scheme;
+    if (!subtotalMap[key]) subtotalMap[key] = { district: r.district, scheme: r.scheme, target: 0, completed: 0 };
+    subtotalMap[key].target    += r.target;
+    subtotalMap[key].completed += r.completed;
+  });
+
+  // Step 2: sort rows by district then scheme then taluk for clean grouping
+  const sorted = [...rows].sort((a,b) => {
+    if (a.district !== b.district) return a.district.localeCompare(b.district);
+    if (a.scheme   !== b.scheme)   return a.scheme.localeCompare(b.scheme);
+    return a.taluk.localeCompare(b.taluk);
+  });
+
+  // Step 3: render with subtotal rows inserted after each district+scheme group
+  let html = '';
+  let prevDistScheme = null;
+  const processedSubtotals = new Set();
+
+  sorted.forEach((r, idx) => {
+    const dsKey = r.district + '||' + r.scheme;
+    // Check if this is the last row for this district+scheme group
+    const nextRow = sorted[idx + 1];
+    const nextDsKey = nextRow ? (nextRow.district + '||' + nextRow.scheme) : null;
+
     const col = r.pct_done>=80?'var(--a4)':r.pct_done>=40?'var(--a1)':r.completed>0?'var(--a5)':'var(--muted)';
     const sc  = SC[r.scheme]||'#aaa';
-    return `<tr>
+
+    // Normal taluk row
+    html += `<tr>
       <td style="font-weight:600">${r.district}</td>
       <td style="color:var(--text2)">${r.taluk}</td>
       <td><span style="color:${sc};font-weight:600">${r.scheme}</span></td>
@@ -781,7 +829,35 @@ function filterProgress() {
         <div class="pct-lbl" style="color:${col}">${r.pct_done}%</div>
       </div></td>
     </tr>`;
-  }).join('');
+
+    // After last row of a district+scheme group → insert subtotal
+    if (dsKey !== nextDsKey && !processedSubtotals.has(dsKey)) {
+      processedSubtotals.add(dsKey);
+      const sub = subtotalMap[dsKey];
+      const subDone = sub.completed;
+      const subTarget = sub.target;
+      const subRem = Math.max(0, subTarget - subDone);
+      const subPct = subTarget > 0 ? Math.min(100, Math.round((subDone / subTarget) * 100)) : 0;
+      const subCol = subPct>=80?'var(--a4)':subPct>=40?'var(--a1)':subDone>0?'var(--a5)':'var(--muted)';
+      const subSc  = SC[sub.scheme]||'#aaa';
+
+      html += `<tr class="dist-subtotal">
+        <td style="color:var(--a3)">${sub.district} <span class="dist-sub-label">TOTAL</span></td>
+        <td style="color:var(--muted);font-size:.62rem;font-style:italic">all taluks</td>
+        <td><span style="color:${subSc};font-weight:700">${sub.scheme}</span></td>
+        <td style="color:var(--muted)">—</td>
+        <td style="font-family:var(--mono);font-weight:700;color:var(--text)">${subTarget}</td>
+        <td style="font-family:var(--mono);font-weight:700;color:${subCol}">${subDone}</td>
+        <td style="font-family:var(--mono);font-weight:600;color:var(--muted)">${subRem}</td>
+        <td><div class="pbar-w">
+          <div class="pbar" style="height:8px"><div class="pbar-f" style="width:${subPct}%;background:${subCol};height:8px"></div></div>
+          <div class="pct-lbl" style="color:${subCol};font-size:.68rem">${subPct}%</div>
+        </div></td>
+      </tr>`;
+    }
+  });
+
+  tbody.innerHTML = html;
 }
 
 function populateDistrictFilter(progress) {
